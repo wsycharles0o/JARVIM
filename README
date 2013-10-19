@@ -1,3 +1,15 @@
+JARVIM:
+Just a rather very intellegent mouse!
+What does it do? It makes all "untouchable" PC screens with cameras "touchable"!
+Features (on Windows Platform):
+    1. Windows command control (closing, minimizing, maximizing, resizing, switching between windows, showing desktop, executing all windows commands including shutdown, etc.)
+    2. Cursor control (left/right click, moving around, etc.); possible extension: digital drawing/sketching, FPS games, virtual reality
+
+TODO:
+    Currently we use color paiting to recognize gestures. We are going to use two cameras to create a 3D model for the hand in the future.)
+
+Implemented by OpenCV, Python, win32api, Numpy.
+
 Prerequisite:
 For Windows platform:
     1. Python 2.7
