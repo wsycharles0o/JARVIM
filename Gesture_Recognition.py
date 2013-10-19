@@ -53,7 +53,7 @@ dcy = 2
 def localize(prev, curr):
 	return prev[1], prev[2], prev[3], curr[1], curr[2], curr[3]
 
-def swipe_left_recognize(prev, curr):
+def swipe_right_recognize(prev, curr):
 	p1, p2, p3, c1, c2, c3 = localize(prev, curr)
 
 	timespan = curr[0] - prev[0]
@@ -72,7 +72,7 @@ def swipe_left_recognize(prev, curr):
 
 	return -dcy
 
-def swipe_right_recognize(prev, curr):
+def swipe_left_recognize(prev, curr):
 	p1, p2, p3, c1, c2, c3 = localize(prev, curr)
 
 	timespan = curr[0] - prev[0]
@@ -92,6 +92,27 @@ def swipe_right_recognize(prev, curr):
 		return scalar * ((v1[0] + v2[0] + v3[0]) / 3) / timespan - dcy
 
 	return -dcy
+
+
+def swipe_up_recognize(prev, curr):
+	p1, p2, p3, c1, c2, c3 = localize(prev, curr)
+
+	timespan = curr[0] - prev[0]
+
+	scalar = 100
+
+	if c1[1] and c2[1] and c3[1] and p1[1] and p2[1] and p3[1]:
+		#showing your palm
+		#calculate the vectors
+		v1 = tuple(map(operator.sub, c1, p1))
+		v2 = tuple(map(operator.sub, c2, p2))
+		v3 = tuple(map(operator.sub, c3, p3))
+		#if v1[0] < 0 and v2[0] < 0 and v3[0] < 0:
+			# the whole hand is moving left
+		return scalar * ((v1[1] + v2[1] + v3[1]) / 3) / timespan - dcy
+
+	return -dcy
+
 
 def distance(p1, p2):
 	return math.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]))
