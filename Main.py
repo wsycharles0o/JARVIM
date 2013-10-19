@@ -9,7 +9,8 @@
 @type gestures_list = [gesture g0, [gesture g1, [...]]]; 0 =< threshold, 
 @type thresholds_list = [int threshold0, [int threshold1, [...]]]
 
-@global gestures_list Gestures
+@global gestures_list Gestures: stores all gestures and their related functions
+@global prev_f: the previous frame captured
 
 @import func GetFrame()
     returns the current frame.
@@ -24,9 +25,14 @@
     handles GUI
 """
 
+#@type frame
+prev_f = []
+
 #@type gestures_list
 Gestures = []
 
+
+prev_f = GetFrame()
 while True:
     UpdateCounters(Recognize_Gestrue(GetFrame()))
     CheckCounters()
