@@ -25,7 +25,7 @@ def get_capture():
     """
     Starts capturing from camera. If cannot init capturing, return None.
     """
-    capture = cv.CaptureFromCAM(0);
+    capture = cv.CaptureFromCAM(1);
     if not capture:
         print "Could not init capturing."
         return None
@@ -119,6 +119,11 @@ def get_frame(ranges):
     area: 0 if object is not found, else object's area
         area only != 0  if it is calculated to be greater than AREA_THRESHOLD
     """
+    new_ranges = []
+    for r in ranges:
+        r0 = cv.Scalar(r[0][0], r[0][1], r[0][2])
+        r1 = cv.Scalar(r[1][0], r[1][1], r[1][2])
+        new_ranges.append((r0,r1))
     if capture:
         frame, timestamp = get_image(capture)
         if _debug: cv.ShowImage(CAMERA_WINDOW, frame)
