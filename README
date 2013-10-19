@@ -1,0 +1,10 @@
+Prerequisite:
+For Windows platform:
+    1. Python 2.7
+        
+    2. Python for Windows extension
+        http://sourceforge.net/projects/pywin32/files/pywin32/Build%20218/
+
+    3. OpenCV for Windows
+        http://opencv.org/downloads.html
+        Please move cv2.pyd to Python_folder/Lib/site-packages
