@@ -2,9 +2,8 @@
 #from Capture.py import GetFrame
 
 """
-@type point = (int x, int y, int a); 0<=x<=1, 0<=y<=1, 0<=a<=1
-@type vector = (point p, int timestamp);
-@type frame = [vector v0, [vector v1, [...]]];
+@type point = (int x, int y, int a, int timestamp); 0<=x<=1, 0<=y<=1, 0<=a<=1
+@type frame = [point p0, [point p1, [...]]];
 @type gesture = (int threshold, func recognize, func action);
 @type gestures_list = [gesture g0, [gesture g1, [...]]]; 0 =< threshold, 
 @type thresholds_list = [int threshold0, [int threshold1, [...]]]
