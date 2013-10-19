@@ -1,5 +1,7 @@
 
 #from Capture.py import GetFrame
+#import GestureRecognition.py
+#import Actions.py
 
 """
 @type point = (int x, int y, int a, int timestamp); 0<=x<=1, 0<=y<=1, 0<=a<=1
