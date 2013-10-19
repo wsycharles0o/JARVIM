@@ -20,6 +20,7 @@ AREA_THRESHOLD = 0.0046 # smaller than this: regard as 0.
 capture = None
 _debug = False
 _color_names = []
+_ranges = []
 CAMERA_WINDOW = "Camera"
 
 def get_image(capture):
@@ -69,7 +70,7 @@ def get_point(image, range1, range2, color_num):
     if small_area > AREA_THRESHOLD:
         x = moment10 / area / w # 0~1 scale
         y = moment01 / area / h # 0~1 scale
-        area = small_area
+        area = small_area # 0~1 scale
     else:
         x = None
         y = None
@@ -78,7 +79,7 @@ def get_point(image, range1, range2, color_num):
 
 #Available outside
 
-def init(debug = False, color_names = []):
+def init(ranges, debug = False, color_names = []):
     """
     Initialization.
     debug: if True, windows would be opened for each color channel.
@@ -88,9 +89,11 @@ def init(debug = False, color_names = []):
     global capture
     global _debug
     global _color_names
+    global _ranges
     capture = cv.CaptureFromCAM(1);
     _debug = debug
     _color_names = color_names
+    _ranges = ranges
     if _debug:
         cv.NamedWindow(CAMERA_WINDOW)
         for color in _color_names:
@@ -102,7 +105,7 @@ def camara_available():
     """
     return capture is not None
 
-def get_frame(ranges):
+def get_frame():
     """
     ranges: a list of three elements of (h, s, v)
     Return a list:
@@ -114,7 +117,7 @@ def get_frame(ranges):
     area: None if color is not found, else color's area in a 0~1 float scale
     """
     new_ranges = []
-    for r in ranges:
+    for r in _ranges:
         r0 = cv.Scalar(r[0][0], r[0][1], r[0][2])
         r1 = cv.Scalar(r[1][0], r[1][1], r[1][2])
         new_ranges.append((r0,r1))
@@ -123,9 +126,9 @@ def get_frame(ranges):
         if _debug: cv.ShowImage(CAMERA_WINDOW, image)
         result = [timestamp]
         i = 0
-        for (range1, range2) in ranges:
+        for (range1, range2) in _ranges:
             result.append(get_point(image, range1, range2, i))
             i += 1
         if _debug: cv.WaitKey(10);
         return result
-    return [time()] + [None] * len(ranges) # if camera is not found
+    return [time()] + [None] * len(_ranges) # if camera is not found
