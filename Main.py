@@ -118,6 +118,8 @@ def initialization():
     if not CP.camara_available(): sys.exit("WHERE IS YOUR CAMERA!?!?")
     Gestures.append([0,GR.swipe_left_recognize,t1])
     Gestures.append([0,GR.swipe_right_recognize,t2])
+    Gestures.append([0,GR.expand_recognize,t3])
+    Gestures.append([0,GR.shrink_recognize,t4])
 
 def get_frame():
     return CP.get_frame()
@@ -134,6 +136,11 @@ def t1 ():
 def t2 ():
     wintab_r()
     print "Right!"
+
+def t3 ():
+    print "expand"
+def t4 ():
+    print "shrink"
 """
 Test Codes Ends.
 """
