@@ -8,3 +8,6 @@ For Windows platform:
     3. OpenCV for Windows
         http://opencv.org/downloads.html
         Please move cv2.pyd to Python_folder/Lib/site-packages
+
+    4. Numpy
+        https://pypi.python.org/pypi/numpy
