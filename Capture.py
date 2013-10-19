@@ -5,7 +5,8 @@ from cv2 import cv
 import cv2
 import numpy
 from time import time
-
+import sys
+from ast import literal_eval as make_tuple
 """
 Sample code for using this frame:
 init( ((90,160,60),(120,256,256)), ((160,160,60),(180,256,256)) ], True, ["Blue", "Red"]);
@@ -21,8 +22,10 @@ capture = None
 _debug = False
 _color_names = []
 _ranges = []
+_test_image = None # TODO: FIND COLOR: TURN THIS OFF!
 #_color_delegates = []
 CAMERA_WINDOW = "Camera"
+TEST_WINDOW = "TEST"
 #DEMO_WINDOW = "Demo"
 #_demo_window_mat = None
 
@@ -67,7 +70,7 @@ def get_point(image, range1, range2, color_num):
         #global _demo_window_mat # TODO BETTER DEMO
         #_demo_window_mat[color_num] = img_threshed # TODO BETTER DEMO
         cv.ShowImage(_color_names[color_num], img_threshed)
-	img_threshed = blur_image(img_threshed)
+	img_threshed = blur_image(img_threshed) # TURN OFF BLURRING HERE
     mat = numpy.asarray(img_threshed[:,:])
     moments = cv2.moments(mat,0)
     moment10 = moments['m10']
@@ -92,6 +95,23 @@ def get_point(image, range1, range2, color_num):
 #            print count, mat[320,240]
 #            count+=1
         #cv.ShowImage(DEMO_WINDOW, dest)
+
+def ask_color():
+    print "Please input two ranges"
+    line = sys.stdin.readline()
+    index = find_nth(line, ',', 2)
+    range1 = make_tuple(line[:index])
+    range2 = make_tuple(line[index+1:])
+    img_threshed = get_thresholded_image(_test_image, range1,range2)
+    cv.ShowImage(TEST_WINDOW, img_threshed)
+    
+
+def find_nth(fromstr, findstr, n):
+    start = fromstr.find(findstr)
+    while start >= 0 and n > 0:
+        start = fromstr.find(findstr, start+len(findstr))
+        n -= 1
+    return start
 
 #Available outside
 
@@ -126,6 +146,7 @@ def init(ranges, debug = False, color_names = []):
         #    _color_delegates.append(cv.Scalar((a[0]+b[0])/2,(a[1]+b[1])/2, (a[2]+b[2])/2))
         for color in _color_names:
             cv.NamedWindow(color)
+            cv.NamedWindow(TEST_WINDOW)
 
 def camara_available():
     """
@@ -147,7 +168,13 @@ def get_frame():
     if capture:
         image, timestamp = get_image(capture)
         if image is not None:
-            if _debug: cv.ShowImage(CAMERA_WINDOW, image)
+            if _debug: 
+                cv.ShowImage(CAMERA_WINDOW, image)
+                global _test_image # TODO: FIND COLOR: TURN THIS OFF!
+                if _test_image is None: # TODO: FIND COLOR: TURN THIS OFF!
+                    _test_image = image # TODO: FIND COLOR: TURN THIS OFF!
+                    cv.NamedWindow("FirstFrameOriginal") # TODO: FIND COLOR: TURN THIS OFF!
+                    cv.ShowImage("FirstFrameOriginal", _test_image) # TODO: FIND COLOR: TURN THIS OFF!
             result = [timestamp]
             i = 0
             for (range1, range2) in _ranges:
@@ -155,6 +182,7 @@ def get_frame():
                 i += 1
             if _debug: 
                 #show_demo_window() # TODO BETTER DEMO
-                cv.WaitKey(10);
+                if cv.WaitKey(10) != -1:
+                    ask_color() # TODO: FIND COLOR: TURN THIS OFF!
             return result
     return [time()] + [None] * len(_ranges) # if camera is not found
