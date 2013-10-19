@@ -62,7 +62,7 @@ def recognize_gestrue(frame):
     #print "R({0})\nG({1})\nB({2})\n\n".format(frame[1],frame[2],frame[3])
     global onclick
     x, y = frame[2][0],frame[2][1]
-    A.MoveCursor(x * 0.9 + 0.05, y * 0.85)
+    if x is not None and y is not None: A.MoveCursor(x * 0.9 + 0.05, y * 0.85)
     if not onclick and (frame[1][0] is None) and (frame[3][0] is None) and not (frame[2][0] is None):
         A.PressMouse()
         onclick = True
