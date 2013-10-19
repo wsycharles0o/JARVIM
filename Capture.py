@@ -67,6 +67,7 @@ def get_point(image, range1, range2, color_num):
         #global _demo_window_mat # TODO BETTER DEMO
         #_demo_window_mat[color_num] = img_threshed # TODO BETTER DEMO
         cv.ShowImage(_color_names[color_num], img_threshed)
+	img_threshed = blur_image(img_threshed)
     mat = numpy.asarray(img_threshed[:,:])
     moments = cv2.moments(mat,0)
     moment10 = moments['m10']
