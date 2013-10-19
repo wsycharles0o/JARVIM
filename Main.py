@@ -2,7 +2,7 @@ import sys
 import time
 import Capture as CP
 import Gesture_Recognition as GR
-#import Actions as A
+import Action as A
 
 """
 @type point = (int x, int y, int a); 0<=x<=1, 0<=y<=1, 0<=a<=1
@@ -14,6 +14,9 @@ import Gesture_Recognition as GR
 @global gestures_list Gestures: stores all gestures and their related functions
 @global frame Prev_f: the previous frame captured
 @global timestamp Pre_act
+@global timestamp Pre_wintab
+@global int WINTAB_TIMEOUT
+@global bool wintab_init
 
 @import func get_frame()
     returns the current frame.
@@ -31,20 +34,6 @@ import Gesture_Recognition as GR
     build Gestures.
 """
 
-"""
-Test Codes Hereforth! 
-REMEMBER TO DELETE!!!!
-"""
-
-def t1 ():
-    print "Left!"
-
-def t2 ():
-    print "Right!"
-"""
-Test Codes Ends.
-"""
-
 #@type frame
 Prev_f = []
 
@@ -54,8 +43,18 @@ Gestures = []
 #@type timestamp
 Pre_act = time.time()
 
+#@type timestamp
+Pre_wintab = time.time()
+
+#@int
+WINTAB_TIMEOUT = 5
+
+#@bool
+Wintab_init = False
+
 def recognize_gestrue(frame):
-    print "R({0})\nG({1})\nB({2})\n\n".format(frame[1],frame[2],frame[3])
+    #TEST CODE
+    #print "R({0})\nG({1})\nB({2})\n\n".format(frame[1],frame[2],frame[3])
     global Gestures, Prev_f
     l = []
     for g in Gestures:
@@ -65,7 +64,8 @@ def recognize_gestrue(frame):
 
 def update_counters(l):
     global Gestures
-    #print "{0} {1}".format(l[0], l[1]) #TEST CODE
+    if not l[0] is l[1]:
+        print "{0} {1}".format(l[0], l[1]) #TEST CODE
     for i in range(len(Gestures)):
         Gestures[i][0] += l[i]
         if Gestures[i][0] < 0:
@@ -79,9 +79,32 @@ def check_counters():
             g[0] = 0
             Pre_act = time.time()
 
+def wintab_l():
+    global Wintab_init, Pre_wintab
+    if not Wintab_init:
+        A.InitSwitchWindows()
+        Wintab_init = True
+    A.SwitchWindowsBackward()
+    Pre_wintab = time.time()
+
+def wintab_r():
+    global Wintab_init, Pre_wintab
+    if not Wintab_init:
+        A.InitSwitchWindows()
+        Wintab_init = True
+    A.SwitchWindowsForward()
+    Pre_wintab = time.time()
 
 """UNFINISHED: REMEMBER TO CHANGE THIS!!!"""
 def GUI():
+#----------------This Part checks win+tab status----------------
+    global Wintab_init, Pre_wintab
+    if  Wintab_init and time.time() - Pre_wintab >= WINTAB_TIMEOUT:
+        A.EndSwitchWindows()
+        Wintab_init = False
+#---------------------------------------------------------------
+
+
     return False
 
 def initialization():
@@ -99,6 +122,21 @@ def get_frame():
     ]
     )
 
+"""
+Test Codes Hereforth! 
+REMEMBER TO DELETE!!!!
+"""
+
+def t1 ():
+    wintab_l()
+    print "Left!"
+
+def t2 ():
+    wintab_r()
+    print "Right!"
+"""
+Test Codes Ends.
+"""
 
 initialization()
 Prev_f = get_frame()

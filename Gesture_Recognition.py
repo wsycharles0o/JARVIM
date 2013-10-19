@@ -8,11 +8,15 @@ import operator
 4--palm
 5--back
 
+@global int Dcy: natural decay rate
+
 @param frame prev = [point p0, [point p1, [...]]];
 @param frame curr = [point p0, [point p1, [...]]];
 @type point = (int x, int y, int a, int timestamp); 0<=x<=1, 0<=y<=1, 0<=a<=1
 
 """
+
+dcy = 2
 
 def localize(prev, curr):
 	return prev[1], prev[2], prev[3], curr[1], curr[2], curr[3]
@@ -22,7 +26,7 @@ def swipe_left_recognize(prev, curr):
 
 	timespan = curr[0] - prev[0]
 
-	scalar = 0.5
+	scalar = 100
 
 	if c1[0] and c2[0] and c3[0] and p1[0] and p2[0] and p3[0]:
 		#showing your palm
@@ -32,16 +36,16 @@ def swipe_left_recognize(prev, curr):
 		v3 = tuple(map(operator.sub, c3, p3))
 		#if v1[0] < 0 and v2[0] < 0 and v3[0] < 0:
 			# the whole hand is moving left
-		return -scalar * ((v1[0] + v2[0] + v3[0]) / 3) / timespan
+		return -scalar * ((v1[0] + v2[0] + v3[0]) / 3) / timespan - dcy
 
-	return -2
+	return -dcy
 
 def swipe_right_recognize(prev, curr):
 	p1, p2, p3, c1, c2, c3 = localize(prev, curr)
 
 	timespan = curr[0] - prev[0]
 
-	scalar = 0.5
+	scalar = 100
 
 	if c1[0] and c2[0] and c3[0] and p1[0] and p2[0] and p3[0]:
 		#showing your palm
@@ -53,9 +57,9 @@ def swipe_right_recognize(prev, curr):
 
 		#if v1[0] > 0 and v2[0] > 0 and v3[0] > 0:
 			# the whole hand is moving left
-		return scalar * ((v1[0] + v2[0] + v3[0]) / 3) / timespan
+		return scalar * ((v1[0] + v2[0] + v3[0]) / 3) / timespan - dcy
 
-	return -2
+	return -dcy
 
 def expand_recognize(prev, curr):
 	pass
