@@ -1,4 +1,5 @@
 import sys
+import time
 import Capture as CP
 import Gesture_Recognition as GR
 #import Actions as A
@@ -12,6 +13,7 @@ import Gesture_Recognition as GR
 
 @global gestures_list Gestures: stores all gestures and their related functions
 @global frame Prev_f: the previous frame captured
+@global timestamp Pre_act
 
 @import func get_frame()
     returns the current frame.
@@ -49,8 +51,11 @@ Prev_f = []
 #@type gestures_list
 Gestures = []
 
+#@type timestamp
+Pre_act = time.time()
 
 def recognize_gestrue(frame):
+    print "R({0})\nG({1})\nB({2})\n\n".format(frame[1],frame[2],frame[3])
     global Gestures, Prev_f
     l = []
     for g in Gestures:
@@ -60,17 +65,20 @@ def recognize_gestrue(frame):
 
 def update_counters(l):
     global Gestures
+    #print "{0} {1}".format(l[0], l[1]) #TEST CODE
     for i in range(len(Gestures)):
         Gestures[i][0] += l[i]
         if Gestures[i][0] < 0:
             Gestures[i][0] = 0
 
 def check_counters():
-    global Gestures
+    global Gestures, Pre_act
     for g in Gestures:
-        if g[0] >= 100:
+        if g[0] >= 100 and (time.time() - Pre_act) > 2.0 :
             g[2]()
             g[0] = 0
+            Pre_act = time.time()
+
 
 """UNFINISHED: REMEMBER TO CHANGE THIS!!!"""
 def GUI():
