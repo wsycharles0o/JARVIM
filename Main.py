@@ -55,7 +55,7 @@ def recognize_gestrue(frame):
     l = []
     for g in Gestures:
         l.append(g[1](Prev_f, frame))
-    prev_f = frame
+    Prev_f = frame
     return l
 
 def update_counters(l):
@@ -64,8 +64,6 @@ def update_counters(l):
         Gestures[i][0] += l[i]
         if Gestures[i][0] < 0:
             Gestures[i][0] = 0
-    #TEST CODE!!!!!!! REMEMBER TO DELETE
-    print "l:{0} r:{0}".format(Gestures[0][0], Gestures[1][0])
 
 def check_counters():
     global Gestures
@@ -79,7 +77,7 @@ def GUI():
     return False
 
 def initialization():
-    CP.init(False, ["Red","Yellow","Green","Blue"])
+    CP.init(True, ["Red", "Green", "Blue"])
     if not CP.camara_available(): sys.exit("WHERE IS YOUR CAMERA!?!?")
     Gestures.append([0,GR.swipe_left_recognize,t1])
     Gestures.append([0,GR.swipe_right_recognize,t2])
@@ -87,10 +85,9 @@ def initialization():
 def get_frame():
     return CP.get_frame(
     [
-    ((160,160,60),(180,256,256)),
-    ((17,160,60),(38,256,256)),
-    ((38,160,60),(75,256,256)),
-    ((90,160,60),(120,256,256)),
+    ((160,145,60),(180,256,256)),
+    ((19,40,60),(35,256,256)),
+    ((65,20,60),(105,256,256)),
     ]
     )
 
