@@ -103,7 +103,7 @@ def ask_color():
     range1 = make_tuple(line[:index])
     range2 = make_tuple(line[index+1:])
     img_threshed = get_thresholded_image(_test_image, range1,range2)
-    cv.ShowImage(TEST_WINDOW, img_threshed)
+    #cv.ShowImage(TEST_WINDOW, img_threshed)
     
 
 def find_nth(fromstr, findstr, n):
@@ -146,7 +146,7 @@ def init(ranges, debug = False, color_names = []):
         #    _color_delegates.append(cv.Scalar((a[0]+b[0])/2,(a[1]+b[1])/2, (a[2]+b[2])/2))
         for color in _color_names:
             cv.NamedWindow(color)
-            cv.NamedWindow(TEST_WINDOW)
+        #scv.NamedWindow(TEST_WINDOW)
 
 def camara_available():
     """
@@ -173,16 +173,16 @@ def get_frame():
                 global _test_image # TODO: FIND COLOR: TURN THIS OFF!
                 if _test_image is None: # TODO: FIND COLOR: TURN THIS OFF!
                     _test_image = image # TODO: FIND COLOR: TURN THIS OFF!
-                    cv.NamedWindow("FirstFrameOriginal") # TODO: FIND COLOR: TURN THIS OFF!
-                    cv.ShowImage("FirstFrameOriginal", _test_image) # TODO: FIND COLOR: TURN THIS OFF!
+                    #cv.NamedWindow("FirstFrameOriginal") # TODO: FIND COLOR: TURN THIS OFF!
+                    #cv.ShowImage("FirstFrameOriginal", _test_image) # TODO: FIND COLOR: TURN THIS OFF!
             result = [timestamp]
             i = 0
             for (range1, range2) in _ranges:
                 result.append(get_point(image, range1, range2, i))
                 i += 1
-            if _debug: 
+            if _debug:
                 #show_demo_window() # TODO BETTER DEMO
-                if cv.WaitKey(10) != -1:
-                    ask_color() # TODO: FIND COLOR: TURN THIS OFF!
+                if cv.WaitKey(10) != -1: pass
+                #    ask_color() # TODO: FIND COLOR: TURN THIS OFF!
             return result
     return [time()] + [None] * len(_ranges) # if camera is not found
