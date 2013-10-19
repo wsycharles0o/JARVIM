@@ -109,7 +109,7 @@ def swipe_up_recognize(prev, curr):
 		v3 = tuple(map(operator.sub, c3, p3))
 		#if v1[0] < 0 and v2[0] < 0 and v3[0] < 0:
 			# the whole hand is moving left
-		return scalar * ((v1[1] + v2[1] + v3[1]) / 3) / timespan - dcy
+		return -scalar * ((v1[1] + v2[1] + v3[1]) / 3) / timespan - dcy
 
 	return -dcy
 
@@ -164,21 +164,12 @@ def shrink_recognize(prev, curr):
 	return -dcy
 
 
-def click_recognize(prev, curr):
-	p1, p2, p3, c1, c2, c3 = localize(prev, curr)
-
-	timespan = curr[0] - prev[0]
-
-	scalar = 100
-
-	if c1[0] and c2[0] and (not c3[0]) and p1[0] and p2[0] and (not p3[0]):
-		v1 = tuple(map(operator.sub, c1, p1))
-		v2 = tuple(map(operator.sub, c2, p2))
-		return scalar*(math.abs(v1[0]) - math.abs(distance(v2, (0, 0)))) - dcy
-	return -dcy
 
 
-def double_click_recognize(prev, curr):
+
+
+
+def right_click_recognize(prev, curr):
 	p1, p2, p3, c1, c2, c3 = localize(prev, curr)
 
 	timespan = curr[0] - prev[0]
