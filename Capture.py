@@ -64,10 +64,12 @@ def get_point(image, range1, range2, color_num):
     moments = cv2.moments(mat,0)
     moment10 = moments['m10']
     moment01 = moments['m01']
-    area = moments['m00'] / (w * h * 255) # 0~1 scale
-    if area > AREA_THRESHOLD:
+    area = moments['m00']
+    small_area =  area / (w * h * 255) # 0~1 scale
+    if small_area > AREA_THRESHOLD:
         x = moment10 / area / w # 0~1 scale
         y = moment01 / area / h # 0~1 scale
+        area = small_area
     else:
         x = None
         y = None
