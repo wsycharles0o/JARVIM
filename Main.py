@@ -3,7 +3,7 @@
 
 """
 @type point = (int x, int y, int a); 0<=x<=1, 0<=y<=1, 0<=a<=1
-@type vector = (point p0, point p1, int timestamp);
+@type vector = (point p, int timestamp);
 @type frame = [vector v0, [vector v1, [...]]];
 @type gesture = (int threshold, func recognize, func action);
 @type gestures_list = [gesture g0, [gesture g1, [...]]]; 0 =< threshold, 
