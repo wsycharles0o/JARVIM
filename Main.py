@@ -51,10 +51,24 @@ WINTAB_TIMEOUT = 4
 
 #@bool
 Wintab_init = False
+def midpoint(p1, p2):
+    return ((p1[0] + p2[0])/2, (p1[1] + p2[1])/2)
+
+
+onclick = False
 
 def recognize_gestrue(frame):
     #TEST CODE
     #print "R({0})\nG({1})\nB({2})\n\n".format(frame[1],frame[2],frame[3])
+    global onclick
+    x, y = frame[2][0],frame[2][1]
+    A.MoveCursor(x * 0.9 + 0.05, y * 0.85)
+    if not onclick and (frame[1][0] is None) and (frame[3][0] is None) and not (frame[2][0] is None):
+        A.PressMouse()
+        onclick = True
+    if onclick and not ((frame[1][0] is None) and (frame[3][0] is None) and not (frame[2][0] is None)):
+        A.PressMouse()
+        onclick = False
     global Gestures, Prev_f
     l = []
     for g in Gestures:
