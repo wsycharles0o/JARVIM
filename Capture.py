@@ -2,6 +2,8 @@ __author__="Jacky"
 __date__ ="$Oct 18, 2013 6:44:33 PM$"
 
 from cv2 import cv
+import cv2
+import numpy
 import time
 
 """
@@ -20,16 +22,6 @@ _color_names = []
 CAMERA_WINDOW = "Camera"
 
 get_time = lambda: time.time()
-
-def get_capture():
-    """
-    Starts capturing from camera. If cannot init capturing, return None.
-    """
-    capture = cv.CaptureFromCAM(1);
-    if not capture:
-        print "Could not init capturing."
-        return None
-    return capture
 
 def get_image(capture):
     """
@@ -60,7 +52,7 @@ def get_thresholded_image(frame, range1, range2):
     cv.InRangeS(img_hsv, range1, range2, img_threshed);
     return img_threshed
 
-def calculate_point(img_threshed):
+def get_point(frame, range1, range2, color_num):
     """
     Return a three number tuple: (x, y, area)
     x: None if object is not found, else object's mid point's x
@@ -68,11 +60,13 @@ def calculate_point(img_threshed):
     area: 0 if object is not found, else object's area
         area only != 0  if it is calculated to be greater than AREA_THRESHOLD
     """
-    mat = img_threshed[:,:]
-    moments = cv.Moments(mat,0)
-    moment10 = cv.GetSpatialMoment(moments, 1, 0);
-    moment01 = cv.GetSpatialMoment(moments, 0, 1);
-    area = cv.GetCentralMoment(moments, 0, 0);
+    img_threshed = get_thresholded_image(frame, range1,range2)
+    if _debug: cv.ShowImage(_color_names[color_num], img_threshed)
+    mat = numpy.asarray(img_threshed[:,:])
+    moments = cv2.moments(mat,0)
+    moment10 = moments['m10']
+    moment01 = moments['m01']
+    area = moments['m00']
     if area > AREA_THRESHOLD:
         x = moment10/area
         y = moment01/area
@@ -80,12 +74,7 @@ def calculate_point(img_threshed):
         x = None
         y = None
         area = None
-    return (x, y, area)
-
-def get_point(frame, range1, range2, color_num):
-    img_threshed = get_thresholded_image(frame, range1,range2)
-    if _debug: cv.ShowImage(_color_names[color_num], img_threshed)
-    x, y, area = calculate_point(img_threshed)
+    del mat
     return (x, y, area)
 
 #Available outside
@@ -94,7 +83,7 @@ def init(debug = False, color_names = []):
     global capture
     global _debug
     global _color_names
-    capture = get_capture();
+    capture = cv.CaptureFromCAM(1);
     _debug = debug
     _color_names = color_names
     if _debug:
@@ -110,7 +99,7 @@ def camara_available():
 
 def get_frame(ranges):
     """
-    range1, range2: init by cv.Scalar(h, s, v)
+    ranges: a list of three elements (h, s, v)
     Return a list:
     the first element is the time stamp when image is captured
     the rest are three number tuples: (x, y, area, timestamp)
@@ -134,4 +123,4 @@ def get_frame(ranges):
             i += 1
         if _debug: cv.WaitKey(10);
         return result
-    return [get_time()] + [None] * len(ranges)
+    return [get_time()] + [None] * len(ranges) # if camera is not found
