@@ -123,6 +123,7 @@ def initialization():
     Gestures.append([0,GR.swipe_right_recognize,t2])
     Gestures.append([0,GR.expand_recognize,t3])
     Gestures.append([0,GR.shrink_recognize,t4])
+    Gestures.append([0,GR.swipe_up_recognize,t5])
 
 def get_frame():
     return CP.get_frame()
@@ -144,6 +145,8 @@ def t3 ():
     print "expand"
 def t4 ():
     print "shrink"
+def t5 ():
+    print "swipe up"
 """
 Test Codes Ends.
 """
