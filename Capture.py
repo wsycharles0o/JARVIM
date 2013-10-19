@@ -21,10 +21,10 @@ capture = None
 _debug = False
 _color_names = []
 _ranges = []
-_color_delegates = []
+#_color_delegates = []
 CAMERA_WINDOW = "Camera"
-DEMO_WINDOW = "Demo"
-_demo_window_mat = None
+#DEMO_WINDOW = "Demo"
+#_demo_window_mat = None
 
 def get_image(capture):
     """
@@ -83,14 +83,15 @@ def get_point(image, range1, range2, color_num):
         area = None
     return (x, y, area)
 
-def show_demo_window(): # TODO BETTER DEMO
-    if _debug and (_demo_window_mat is not None):
-        count = 0
-        for image in _demo_window_mat:
-            mat = image[:,:] # in RGB: 0 is R.
-            print count, mat[320,240]
-            count+=1
+#def show_demo_window(): # TODO BETTER DEMO
+#    if _debug and (_demo_window_mat is not None):
+#        count = 0
+#        for image in _demo_window_mat:
+#            mat = image[:,:] # in RGB: 0 is R.
+#            print count, mat[320,240]
+#            count+=1
         #cv.ShowImage(DEMO_WINDOW, dest)
+
 #Available outside
 
 def init(ranges, debug = False, color_names = []):
@@ -104,12 +105,12 @@ def init(ranges, debug = False, color_names = []):
     global _debug
     global _color_names
     global _ranges
-    global _color_delegates # TODO BETTER DEMO
-    global _demo_window_mat
+    #global _color_delegates # TODO BETTER DEMO
+#    global _demo_window_mat
     capture = cv.CaptureFromCAM(1);
     _debug = debug
     _color_names = color_names
-    _demo_window_mat = [None]*len(ranges) # TODO BETTER DEMO
+    #_demo_window_mat = [None]*len(ranges) # TODO BETTER DEMO
     _ranges = []
     for r in ranges: # can actually delete and use _ranges = ranges
         r0 = cv.Scalar(r[0][0], r[0][1], r[0][2])
@@ -118,10 +119,10 @@ def init(ranges, debug = False, color_names = []):
     if _debug:
         cv.NamedWindow(CAMERA_WINDOW)
         #cv.NamedWindow(DEMO_WINDOW)
-        for r in ranges: # TODO BETTER DEMO
-            a = r[0]
-            b = r[1]
-            _color_delegates.append(cv.Scalar((a[0]+b[0])/2,(a[1]+b[1])/2, (a[2]+b[2])/2))
+        #for r in ranges: # TODO BETTER DEMO
+        #    a = r[0]
+        #    b = r[1]
+        #    _color_delegates.append(cv.Scalar((a[0]+b[0])/2,(a[1]+b[1])/2, (a[2]+b[2])/2))
         for color in _color_names:
             cv.NamedWindow(color)
 
@@ -144,14 +145,15 @@ def get_frame():
     """
     if capture:
         image, timestamp = get_image(capture)
-        if _debug: cv.ShowImage(CAMERA_WINDOW, image)
-        result = [timestamp]
-        i = 0
-        for (range1, range2) in _ranges:
-            result.append(get_point(image, range1, range2, i))
-            i += 1
-        if _debug: 
-            #show_demo_window() # TODO BETTER DEMO
-            cv.WaitKey(10);
-        return result
+        if image is not None:
+            if _debug: cv.ShowImage(CAMERA_WINDOW, image)
+            result = [timestamp]
+            i = 0
+            for (range1, range2) in _ranges:
+                result.append(get_point(image, range1, range2, i))
+                i += 1
+            if _debug: 
+                #show_demo_window() # TODO BETTER DEMO
+                cv.WaitKey(10);
+            return result
     return [time()] + [None] * len(_ranges) # if camera is not found
