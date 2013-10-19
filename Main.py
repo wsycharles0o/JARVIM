@@ -47,7 +47,7 @@ Pre_act = time.time()
 Pre_wintab = time.time()
 
 #@int
-WINTAB_TIMEOUT = 5
+WINTAB_TIMEOUT = 4
 
 #@bool
 Wintab_init = False
@@ -74,7 +74,7 @@ def update_counters(l):
 def check_counters():
     global Gestures, Pre_act
     for g in Gestures:
-        if g[0] >= 100 and (time.time() - Pre_act) > 2.0 :
+        if g[0] >= 100 and (time.time() - Pre_act) > 1.0 :
             g[2]()
             g[0] = 0
             Pre_act = time.time()
@@ -108,19 +108,19 @@ def GUI():
     return False
 
 def initialization():
-    CP.init(True, ["Red", "Green", "Blue"])
-    if not CP.camara_available(): sys.exit("WHERE IS YOUR CAMERA!?!?")
-    Gestures.append([0,GR.swipe_left_recognize,t1])
-    Gestures.append([0,GR.swipe_right_recognize,t2])
-
-def get_frame():
-    return CP.get_frame(
+    CP.init(
     [
     ((160,145,60),(180,256,256)),
     ((19,40,60),(35,256,256)),
     ((65,20,60),(105,256,256)),
     ]
-    )
+    ,True, ["Red", "Green", "Blue"])
+    if not CP.camara_available(): sys.exit("WHERE IS YOUR CAMERA!?!?")
+    Gestures.append([0,GR.swipe_left_recognize,t1])
+    Gestures.append([0,GR.swipe_right_recognize,t2])
+
+def get_frame():
+    return CP.get_frame()
 
 """
 Test Codes Hereforth! 
