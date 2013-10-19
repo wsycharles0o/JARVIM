@@ -20,6 +20,7 @@
     for each gesture in Gestures call recognize(f) with each frame.
 @func UpdateCounters(thresholds_list l)
     for each gesture in Gestures apply l to threshold.
+    Change negative threshold to 0.
 @func CheckCounters()
     for each gesture in Gestures call action() when threshold > 100 
 @func GUI()
